@@ -46,18 +46,36 @@
   </div>
 
   <div class="container">
-    <form>
+    <form action='/analyze' method ='POST'>{% csrf_token %} 
       <div class="form-group">
         <label for="exampleFormControlTextarea1">Enter your text here and let Text Utils do the mag</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="9"></textarea>
+        <textarea class="form-control" name='text' id="exampleFormControlTextarea1" rows="9"></textarea>
       </div>
-    </form>
+    
+    
     <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitch1">
-      <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+      <input type="checkbox" name="removepunc" class="custom-control-input" id="customSwitch1">
+      <label class="custom-control-label" for="customSwitch1">Remove the punctuations</label>
     </div>
-  </div>
 
+    <div class="custom-control custom-switch">
+      <input type="checkbox" name="fullcaps" class="custom-control-input" id="customSwitch2">
+      <label class="custom-control-label" for="customSwitch2">UPPERCASE</label>
+    </div>
+
+    <div class="custom-control custom-switch">
+      <input type="checkbox" name="newlineremover" class="custom-control-input" id="customSwitch3">
+      <label class="custom-control-label" for="customSwitch3">New Line Remover</label>
+    </div>
+
+    <div class="custom-control custom-switch">
+      <input type="checkbox" name="extraspaceremover" class="custom-control-input" id="customSwitch4">
+      <label class="custom-control-label" for="customSwitch4">Extra Space Remover</label>
+    </div>
+  
+    <button type="submit" class="btn btn-dark mt-2">Analyze Text</button>
+    </form>
+  </div> 
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

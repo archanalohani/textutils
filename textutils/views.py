@@ -2,29 +2,18 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 def index(request):
-    return render(request,'index2.html')
-
-def ex1(request):
-    sites=[''' <h1>for Entertainment </h1><a href=https://www.youtube.com >youtube video</a>'''
-           ''' <h1>for Interaction <h1><a href="https://wwww.facebook</a>  '''
-           ''' <h1>for insight</h1><a href="https://www.ted.com/talks</a>'''
-           ''' <h1>for internship</h1>href="https://intershala.com">Internship</a>'''
-          ]
-
-    return HttpResponse((sites))
-
-
+    return render(request,'index.html')
 
 def analyze(request):
 #get the first text
-    djtext = request.GET.get('text', 'default')
+    djtext = request.POST.get('text', 'default')
   
     #check checkbox values
 
-    removepunc=request.GET.get('removepunc','off')
-    fullcaps = request.GET.get('fullcaps', 'off')
-    newlineremover=request.GET.get('newlineremover','off')
-    extraspaceremover=request.GET.get('extraspaceremover','off')
+    removepunc=request.POST.get('removepunc','off')
+    fullcaps = request.POST.get('fullcaps', 'off')
+    newlineremover=request.POST.get('newlineremover','off') 
+    extraspaceremover=request.POST.get('extraspaceremover','off')
 
 #check which checkbox is on
 
@@ -35,22 +24,35 @@ def analyze(request):
             if char not in punctuations:
                 analyzed = analyzed + char
         params = {'purpose': 'Removed Punctuations', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
-    elif(fullcaps=="on"):
+        djtext=analyzed
+    
+    if(fullcaps=="on"):
         analyzed=""
         for char in djtext:
             analyzed=analyzed+char.upper()
         params={'purpose':'changed to uppercase','analyzed_text':analyzed}
-        return render(request,'analyze.html',params)
+        djtext=analyzed
+    
 
-   
-    elif(extraspaceremover=="on"):
+    if(newlineremover=="on"):
+        analyzed=""
+        for char in djtext:
+            if (char!="\n" and char!="\r") :
+                analyzed=analyzed+char
+
+        params={'purpose':'Remove Newline','analyzed_text':analyzed}    
+        djtext=analyzed
+    
+    
+    if(extraspaceremover=="on"):
         analyzed=""
         for index,char in enumerate(djtext):
-            if not djtext[index]==" " and djtext[index+1]:
+            if not( djtext[index]==" " and djtext[index+1]==""):
               analyzed=analyzed+char
         params={'purpose':'extra space remover','analyzed_text':analyzed}
-        return render(request,'analyze.html',params)
 
-    else:
-        return HttpResponse('Error') 
+    if(removepunc!="on" and newlineremover!="on" and extraspaceremover!="on" and fullcaps!="on"):
+    
+        return HttpResponse('pz select any option') 
+    return render(request,'analyze.html',params)
+ 
